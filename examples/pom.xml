@@ -16,6 +16,7 @@
     <modules>
         <module>and</module>
         <module>or</module>
+        <module>xor</module>
     </modules>
 
     <repositories>
