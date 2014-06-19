@@ -39,6 +39,10 @@ public abstract class TransferFunction {
     }
 
     public double normalize(final double value, final double min, final double max) {
+        if (min > max) {
+            return normalize(min - value, max, min);
+        }
+
         return getLowerLimit() + ((value / (max - min))) * (getUpperLimit() - getLowerLimit());
     }
 }
