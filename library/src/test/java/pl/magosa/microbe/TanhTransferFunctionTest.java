@@ -3,6 +3,7 @@ package pl.magosa.microbe;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -38,5 +39,11 @@ public class TanhTransferFunctionTest {
     @Test
     public void testGetLowerLimit() {
         assertEquals(-1.0, transferFunction.getLowerLimit(), 0.001);
+    }
+
+    @Test
+    public void makeArray() {
+        double[] result = transferFunction.makeArray(5, new int[] { 1, 2 });
+        assertArrayEquals(new double[] { -1.0, 1.0, 1.0, -1.0, -1.0 }, result, 0.01);
     }
 }
