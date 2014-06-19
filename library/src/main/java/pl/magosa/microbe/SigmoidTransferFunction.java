@@ -3,7 +3,7 @@ package pl.magosa.microbe;
 /**
  * (c) 2014 Krzysztof Magosa
  */
-public class SigmoidTransferFunction implements TransferFunction {
+public class SigmoidTransferFunction extends TransferFunction {
     public double function(final double value) {
         return 1.0 / (1.0 + Math.exp(-1.0 * value));
     }

@@ -3,7 +3,7 @@ package pl.magosa.microbe;
 /**
  * (c) 2014 Krzysztof Magosa
  */
-public class LinearTransferFunction implements TransferFunction {
+public class LinearTransferFunction extends TransferFunction {
     public double function(final double value) {
         return value;
     }

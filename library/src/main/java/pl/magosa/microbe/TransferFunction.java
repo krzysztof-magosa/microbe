@@ -3,7 +3,7 @@ package pl.magosa.microbe;
 /**
  * (c) 2014 Krzysztof Magosa
  */
-public interface TransferFunction {
+public abstract class TransferFunction {
     abstract public double function(final double value);
 
     /**

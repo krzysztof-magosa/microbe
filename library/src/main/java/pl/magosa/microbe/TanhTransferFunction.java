@@ -5,7 +5,7 @@ package pl.magosa.microbe;
  *
  * (c) 2014 Krzysztof Magosa
  */
-public class TanhTransferFunction implements TransferFunction {
+public class TanhTransferFunction extends TransferFunction {
     public double function(final double value) {
         return Math.tanh(value);
     }

@@ -3,7 +3,7 @@ package pl.magosa.microbe;
 /**
  * (c) 2014 Krzysztof Magosa
  */
-public class StepTransferFunction implements TransferFunction {
+public class StepTransferFunction extends TransferFunction {
     public double function(final double value) {
         return (value >= 0) ? 1.0 : 0.0;
     }
