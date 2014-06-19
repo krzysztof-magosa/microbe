@@ -37,4 +37,8 @@ public abstract class TransferFunction {
 
         return result;
     }
+
+    public double normalize(final double value, final double min, final double max) {
+        return getLowerLimit() + ((value / (max - min))) * (getUpperLimit() - getLowerLimit());
+    }
 }
