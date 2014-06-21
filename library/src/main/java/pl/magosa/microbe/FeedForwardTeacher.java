@@ -43,7 +43,7 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
                     double productSum = 0;
                     for (Neuron nlNeuron : layer.getNextLayer().getNeurons()) {
                         int nlHashId = System.identityHashCode(nlNeuron);
-                        productSum += (errorGradient.get(nlHashId) * nlNeuron.getInputs().get(index).getWeight());
+                        productSum += (errorGradient.get(nlHashId) * nlNeuron.getInput(index).getWeight());
                     }
 
                     errorGradient.put(hashId, neuron.getTransferFunction().derivative(neuron.getOutput()) * productSum);
