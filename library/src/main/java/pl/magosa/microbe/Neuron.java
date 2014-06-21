@@ -16,7 +16,7 @@ public class Neuron {
 
     public Neuron() {
         threshold = Math.random();
-        inputs = new ArrayList<Input>();
+        inputs = new ArrayList<>();
     }
 
     public void setTransferFunction(TransferFunction transferFunction) {
