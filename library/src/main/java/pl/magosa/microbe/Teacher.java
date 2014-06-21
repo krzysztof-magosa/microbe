@@ -1,6 +1,7 @@
 package pl.magosa.microbe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * (c) 2014 Krzysztof Magosa
@@ -58,7 +59,25 @@ public abstract class Teacher<T extends Network>  {
         return Math.sqrt(error / learningData.size());
     }
 
-    abstract public boolean train(int maxEpochs, double maxError);
+    public boolean train(int maxEpochs, double maxError) {
+        if (squaredErrorEpoch() <= maxError) {
+            // Don't train already trained network
+            return true;
+        }
+
+        for (int epoch = 1; epoch <= maxEpochs; epoch++) {
+            trainEpoch();
+
+            lastEpochError = squaredErrorEpoch();
+            if (lastEpochError <= maxError) {
+                return true;
+            }
+
+            Collections.shuffle(learningData);
+        }
+
+        return false;
+    }
 
     public static Teacher factory(Network network) {
         if (network instanceof FeedForwardNetwork) {
@@ -67,4 +86,6 @@ public abstract class Teacher<T extends Network>  {
 
         throw new RuntimeException("Unsupported network type.");
     }
+
+    abstract protected void trainEpoch();
 }

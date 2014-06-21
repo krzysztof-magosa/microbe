@@ -1,7 +1,6 @@
 package pl.magosa.microbe;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -69,27 +68,14 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
         }
     }
 
-    public boolean train(int maxEpochs, double maxError) {
-        for (int epoch = 1; epoch <= maxEpochs; epoch++) {
-            lastEpochError = squaredErrorEpoch();
+    protected void trainEpoch() {
+        for (int index = 0; index < learningData.size(); index++) {
+            LearningSet set = learningData.get(index);
 
-            // Don't train already trained network
-            if (lastEpochError <= maxError) {
-                return true;
-            }
+            network.setValues(set.getInput());
+            network.run();
 
-            for (int index = 0; index < learningData.size(); index++) {
-                LearningSet set = learningData.get(index);
-
-                network.setValues(set.getInput());
-                network.run();
-
-                backPropagate(set.getOutput());
-            }
-
-            Collections.shuffle(learningData);
+            backPropagate(set.getOutput());
         }
-
-        return false;
     }
 }
