@@ -12,7 +12,7 @@ public class FeedForwardLayer {
     protected FeedForwardLayer nextLayer;
 
     public FeedForwardLayer() {
-        neurons = new ArrayList<Neuron>();
+        neurons = new ArrayList<>();
     }
 
     public void createNeurons(final int count, Consumer<Neuron> initFunction) {
