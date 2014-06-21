@@ -10,7 +10,7 @@ public class FeedForwardNetwork extends Network {
     protected ArrayList<FeedForwardLayer> layers;
 
     public FeedForwardNetwork() {
-        layers = new ArrayList<FeedForwardLayer>();
+        layers = new ArrayList<>();
     }
 
     public FeedForwardLayer createLayer(Consumer<FeedForwardLayer> initFunction) {
