@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public abstract class Teacher {
     protected double learningRate;
     protected double momentum;
+    protected double lastEpochError;
     protected ArrayList<LearningSet> learningData;
 
     public Teacher() {
@@ -26,8 +27,11 @@ public abstract class Teacher {
         learningData.add(set);
     }
 
+    public double getError() {
+        return lastEpochError;
+    }
+
     abstract public boolean train(int maxEpochs, double maxError);
-    abstract public double getError();
 
     public static Teacher factory(Network network) {
         if (network instanceof FeedForwardNetwork) {

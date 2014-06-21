@@ -10,7 +10,6 @@ import java.util.Random;
  */
 public class FeedForwardTeacher extends Teacher {
     protected FeedForwardNetwork network;
-    protected double error;
     protected Random randomGenerator;
     protected FeedForwardLayer outputLayer;
     protected ArrayList<FeedForwardLayer> workingLayers;
@@ -102,10 +101,10 @@ public class FeedForwardTeacher extends Teacher {
 
     public boolean train(int maxEpochs, double maxError) {
         for (int epoch = 1; epoch <= maxEpochs; epoch++) {
-            error = squaredErrorEpoch();
+            lastEpochError = squaredErrorEpoch();
 
             // Don't train already trained network
-            if (error <= maxError) {
+            if (lastEpochError <= maxError) {
                 return true;
             }
 
@@ -122,9 +121,5 @@ public class FeedForwardTeacher extends Teacher {
         }
 
         return false;
-    }
-
-    public double getError() {
-        return error;
     }
 }
