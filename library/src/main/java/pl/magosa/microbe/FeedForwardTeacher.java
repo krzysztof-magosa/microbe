@@ -10,10 +10,7 @@ import java.util.Random;
  */
 public class FeedForwardTeacher extends Teacher {
     protected FeedForwardNetwork network;
-    protected double learningRate;
-    protected double momentum;
     protected double error;
-    protected ArrayList<LearningSet> learningData;
     protected Random randomGenerator;
     protected FeedForwardLayer outputLayer;
     protected ArrayList<FeedForwardLayer> workingLayers;
@@ -40,18 +37,6 @@ public class FeedForwardTeacher extends Teacher {
                 prevCorrection.put(System.identityHashCode(neuron), 0.0);
             }
         }
-    }
-
-    public void setLearningRate(final double rate) {
-        this.learningRate = rate;
-    }
-
-    public void setMomentum(final double momentum) {
-        this.momentum = momentum;
-    }
-
-    public void addLearningSet(LearningSet set) {
-        learningData.add(set);
     }
 
     protected double squaredError(LearningSet set) {
