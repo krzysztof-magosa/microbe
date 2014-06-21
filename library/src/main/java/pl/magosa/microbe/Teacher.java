@@ -32,6 +32,32 @@ public abstract class Teacher<T extends Network>  {
         return lastEpochError;
     }
 
+    protected double squaredError(LearningSet set) {
+        network.setValues(set.getInput());
+        network.run();
+
+        double error = 0;
+        double outputs[] = network.getOutput();
+        double desired[] = set.getOutput();
+
+        for (int i = 0; i < outputs.length; i++) {
+            double x = outputs[i] - desired[i];
+            error += Math.pow(x, 2);
+        }
+
+        return error;
+    }
+
+    protected double squaredErrorEpoch() {
+        double error = 0;
+
+        for (LearningSet set : learningData) {
+            error += squaredError(set);
+        }
+
+        return Math.sqrt(error / learningData.size());
+    }
+
     abstract public boolean train(int maxEpochs, double maxError);
 
     public static Teacher factory(Network network) {
