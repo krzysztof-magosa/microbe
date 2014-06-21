@@ -18,9 +18,6 @@ public class FeedForwardTeacher extends Teacher {
     public FeedForwardTeacher(FeedForwardNetwork network) {
         this.network = network;
 
-        learningRate = 0.75; // 0.05-0.25 without momentum, 0.25-0.75 with momentum > 0
-        momentum = 0.95; // 0.75-0.95 or 0
-
         learningData = new ArrayList<LearningSet>();
         randomGenerator = new Random();
 

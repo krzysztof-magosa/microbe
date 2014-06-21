@@ -6,8 +6,8 @@ import java.util.ArrayList;
  * (c) 2014 Krzysztof Magosa
  */
 public abstract class Teacher {
-    protected double learningRate;
-    protected double momentum;
+    protected double learningRate = 0.75;
+    protected double momentum = 0.95;
     protected double lastEpochError;
     protected ArrayList<LearningSet> learningData;
 
