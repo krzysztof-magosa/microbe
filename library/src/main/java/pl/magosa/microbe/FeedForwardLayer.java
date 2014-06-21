@@ -59,7 +59,7 @@ public class FeedForwardLayer {
             double output = neurons.get(i).getOutput();
 
             for (Neuron nlNeuron : nextLayer.neurons) {
-                nlNeuron.getInputs().get(nlNeuron.hasBias() ? i + 1 : i).setValue(output);
+                nlNeuron.getInput(i).setValue(output);
             }
         }
     }
