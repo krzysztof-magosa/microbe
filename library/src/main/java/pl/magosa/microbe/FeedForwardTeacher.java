@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
     protected FeedForwardLayer outputLayer;
     protected ArrayList<FeedForwardLayer> workingLayers;
-    protected HashMap<Integer, Double> prevCorrection;
+    protected HashMap<Integer, Double> prevWeightCorrection;
 
     public FeedForwardTeacher(FeedForwardNetwork network) {
         this.network = network;
@@ -20,10 +20,10 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
             workingLayers.add(network.getLayers().get(i));
         }
 
-        prevCorrection = new HashMap<Integer, Double>();
+        prevWeightCorrection = new HashMap<Integer, Double>();
         for (FeedForwardLayer layer : workingLayers) {
             for (Neuron neuron : layer.getNeurons()) {
-                prevCorrection.put(System.identityHashCode(neuron), 0.0);
+                prevWeightCorrection.put(System.identityHashCode(neuron), 0.0);
             }
         }
     }
@@ -51,10 +51,10 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
 
                 for (Input input : neuron.getInputs()) {
                     double correction = learningRate * input.getValue() * errorGradient.get(hashId);
-                    double newWeight = input.getWeight() + correction + (momentum * prevCorrection.get(hashId));
+                    double newWeight = input.getWeight() + correction + (momentum * prevWeightCorrection.get(hashId));
 
                     input.setWeight(newWeight);
-                    prevCorrection.put(hashId, correction);
+                    prevWeightCorrection.put(hashId, correction);
                 }
 
                 double thresholdCorrection = learningRate * -1.0 * errorGradient.get(hashId);
