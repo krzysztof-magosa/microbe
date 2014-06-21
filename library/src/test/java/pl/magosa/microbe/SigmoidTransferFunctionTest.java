@@ -52,5 +52,9 @@ public class SigmoidTransferFunctionTest {
         assertEquals(0.0, transferFunction.normalize(0, 0, 5), 0.01);
         assertEquals(0.5, transferFunction.normalize(128, 0, 255), 0.01);
         assertEquals(0.25, transferFunction.normalize(250, 0, 1000), 0.01);
+
+        assertEquals(1.0, transferFunction.normalize(0, 5, 0), 0.01);
+        assertEquals(0.5, transferFunction.normalize(128, 255, 0), 0.01);
+        assertEquals(0.75, transferFunction.normalize(250, 1000, 0), 0.01);
     }
 }
