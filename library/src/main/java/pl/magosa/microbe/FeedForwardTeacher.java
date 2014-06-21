@@ -2,22 +2,17 @@ package pl.magosa.microbe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 /**
  * (c) 2014 Krzysztof Magosa
  */
 public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
-    protected Random randomGenerator;
     protected FeedForwardLayer outputLayer;
     protected ArrayList<FeedForwardLayer> workingLayers;
     protected HashMap<Integer, Double> prevCorrection;
 
     public FeedForwardTeacher(FeedForwardNetwork network) {
         this.network = network;
-
-        learningData = new ArrayList<LearningSet>();
-        randomGenerator = new Random();
 
         outputLayer = network.getLayers().get(network.getLayers().size() - 1);
         workingLayers = new ArrayList<FeedForwardLayer>();
