@@ -5,11 +5,12 @@ import java.util.ArrayList;
 /**
  * (c) 2014 Krzysztof Magosa
  */
-public abstract class Teacher {
+public abstract class Teacher<T extends Network>  {
     protected double learningRate = 0.75;
     protected double momentum = 0.95;
     protected double lastEpochError;
     protected ArrayList<LearningSet> learningData;
+    protected T network;
 
     public Teacher() {
         learningData = new ArrayList<LearningSet>();

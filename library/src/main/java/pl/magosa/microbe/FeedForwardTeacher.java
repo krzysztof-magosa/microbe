@@ -8,8 +8,7 @@ import java.util.Random;
 /**
  * (c) 2014 Krzysztof Magosa
  */
-public class FeedForwardTeacher extends Teacher {
-    protected FeedForwardNetwork network;
+public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
     protected Random randomGenerator;
     protected FeedForwardLayer outputLayer;
     protected ArrayList<FeedForwardLayer> workingLayers;
