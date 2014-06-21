@@ -27,6 +27,10 @@ public class Neuron {
         return transferFunction;
     }
 
+    public Input getInput(final int index) {
+        return inputs.get(hasBias() ? index+1 : index);
+    }
+
     public void createInputs(final int count) {
         for (int i = 1; i <= count; i++) {
             createInput((Input input) -> {});
