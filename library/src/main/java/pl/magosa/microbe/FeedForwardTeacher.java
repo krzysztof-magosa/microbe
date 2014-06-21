@@ -15,12 +15,12 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
         this.network = network;
 
         outputLayer = network.getLayers().get(network.getLayers().size() - 1);
-        workingLayers = new ArrayList<FeedForwardLayer>();
+        workingLayers = new ArrayList<>();
         for (int i = network.getLayers().size() - 1; i > 0 ; i--) {
             workingLayers.add(network.getLayers().get(i));
         }
 
-        prevWeightCorrection = new HashMap<Integer, Double>();
+        prevWeightCorrection = new HashMap<>();
         for (FeedForwardLayer layer : workingLayers) {
             for (Neuron neuron : layer.getNeurons()) {
                 prevWeightCorrection.put(System.identityHashCode(neuron), 0.0);
@@ -29,7 +29,7 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
     }
 
     protected void backPropagate(final double[] desired) {
-        HashMap<Integer, Double> errorGradient = new HashMap<Integer, Double>();
+        HashMap<Integer, Double> errorGradient = new HashMap<>();
 
         for (FeedForwardLayer layer : workingLayers) {
             for (int index = 0; index < layer.getNeurons().size(); index++) {
