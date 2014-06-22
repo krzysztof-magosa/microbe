@@ -66,6 +66,7 @@ public abstract class Teacher<T extends Network>  {
         }
 
         for (int epoch = 1; epoch <= maxEpochs; epoch++) {
+            backupParameters();
             trainEpoch();
 
             lastEpochError = squaredErrorEpoch();
