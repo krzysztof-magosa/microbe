@@ -15,7 +15,7 @@ public class Neuron {
     protected TransferFunction transferFunction;
 
     public Neuron() {
-        threshold = Math.random();
+        threshold = -0.5 + Math.random();
         inputs = new ArrayList<>();
     }
 
