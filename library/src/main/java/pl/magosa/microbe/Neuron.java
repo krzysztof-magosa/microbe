@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 public class Neuron {
     protected double threshold;
     protected double output;
+    protected double sum;
     protected boolean hasBias;
     protected ArrayList<Input> inputs;
     protected TransferFunction transferFunction;
@@ -69,8 +70,12 @@ public class Neuron {
         return output;
     }
 
+    public double getSum() {
+        return sum;
+    }
+
     public void activate() {
-        double sum = -threshold;
+        sum = -threshold;
 
         for (Input input : inputs) {
             sum += (input.getWeight() * input.getValue());
