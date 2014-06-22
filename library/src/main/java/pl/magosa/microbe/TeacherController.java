@@ -23,8 +23,6 @@ public class TeacherController {
     protected double currentErrorBackup;
     protected double lastError;
     protected double lastErrorBackup;
-    protected double slope;
-    protected boolean hasSlope = false;
     protected long epoch;
 
     public TeacherController(final Teacher teacher) {
