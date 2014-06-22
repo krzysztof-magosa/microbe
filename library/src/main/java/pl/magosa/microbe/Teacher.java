@@ -88,4 +88,6 @@ public abstract class Teacher<T extends Network>  {
     }
 
     abstract protected void trainEpoch();
+    abstract protected void backupParameters();
+    abstract public void rollback();
 }
