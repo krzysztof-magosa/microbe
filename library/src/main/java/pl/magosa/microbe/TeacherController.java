@@ -22,7 +22,9 @@ public class TeacherController {
     protected int debugEveryNEpoches;
 
     protected double currentError;
+    protected double currentErrorBackup;
     protected double lastError;
+    protected double lastErrorBackup;
     protected double slope;
     protected boolean hasSlope = false;
     protected long epoch;
@@ -148,7 +150,12 @@ public class TeacherController {
         slopeFifo = new CircularFifoQueue<>(slopeMaxEpoches);
         teacher.setLearningRate(learningRate);
 
+        teacher.calculateSquaredErrorEpoch();
+        lastError = currentError = teacher.getError();
         for (epoch = 1; ; epoch++) {
+            currentErrorBackup = currentError;
+            lastErrorBackup = lastError;
+
             lastError = teacher.getError();
             if (teacher.train(1, goal)) {
                 break;
@@ -171,6 +178,9 @@ public class TeacherController {
             if ((currentError / lastError) > maximumErrorIncRatio) {
                 teacher.rollback();
                 learningRate = learningRate * learningRateDecRatio;
+
+                currentError = currentErrorBackup;
+                lastError = lastErrorBackup;
             }
             else if (hasSlope && (slope < -0.00001)) {
                 learningRate = learningRate * learningRateIncRatio;
