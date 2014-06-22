@@ -10,6 +10,10 @@ public class Input {
     protected double value;
 
     public Input() {
+        init();
+    }
+
+    public void init() {
         weight = -0.5 + Math.random();
     }
 
