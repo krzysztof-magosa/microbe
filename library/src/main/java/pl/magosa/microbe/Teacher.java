@@ -49,18 +49,19 @@ public abstract class Teacher<T extends Network>  {
         return error;
     }
 
-    protected double squaredErrorEpoch() {
+    public double calculateSquaredErrorEpoch() {
         double error = 0;
 
         for (LearningSet set : learningData) {
             error += squaredError(set);
         }
 
-        return Math.sqrt(error / learningData.size());
+        lastEpochError = Math.sqrt(error / learningData.size());
+        return lastEpochError;
     }
 
     public boolean train(int maxEpochs, double maxError) {
-        if (squaredErrorEpoch() <= maxError) {
+        if (calculateSquaredErrorEpoch() <= maxError) {
             // Don't train already trained network
             return true;
         }
@@ -69,8 +70,8 @@ public abstract class Teacher<T extends Network>  {
             backupParameters();
             trainEpoch();
 
-            lastEpochError = squaredErrorEpoch();
-            if (lastEpochError <= maxError) {
+            calculateSquaredErrorEpoch();
+            if (getError() <= maxError) {
                 return true;
             }
 
