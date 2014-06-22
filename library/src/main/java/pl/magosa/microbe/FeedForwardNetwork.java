@@ -1,6 +1,7 @@
 package pl.magosa.microbe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.Consumer;
 
 /**
@@ -97,5 +98,17 @@ public class FeedForwardNetwork extends Network {
 
     public ArrayList<FeedForwardLayer> getLayers() {
         return layers;
+    }
+
+    protected HashMap<String, Neuron> getNeuronsMap() {
+        HashMap<String, Neuron> map = new HashMap<>();
+
+        for (int li = 0; li < layers.size(); li++) {
+            for (int ni = 0; ni < layers.get(li).getNeurons().size(); ni++) {
+                map.put(li + "/" + ni, layers.get(li).getNeurons().get(ni));
+            }
+        }
+
+        return map;
     }
 }
