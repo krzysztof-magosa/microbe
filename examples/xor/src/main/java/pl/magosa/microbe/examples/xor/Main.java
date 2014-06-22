@@ -50,7 +50,6 @@ public class Main {
         });
 
         Teacher teacher = Teacher.factory(network);
-        teacher.setLearningRate(0.25);
         teacher.setMomentum(0.7);
 
         // Truth table
@@ -60,13 +59,11 @@ public class Main {
         teacher.addLearningSet(new LearningSet(new double[] {  1.0,  1.0 }, new double[] { -1.0 }));
 
         // Train
-        if (teacher.train(50000, 0.05)) {
-            System.out.print("Successfully trained network.\n");
-        }
-        else {
-            System.out.print("You are unlucky, network wasn't trained, try again please.\n");
-            System.exit(1);
-        }
+        TeacherController controller = new TeacherController(teacher);
+        controller.setGoal(0.01);
+        controller.setDebug(true);
+        controller.setMaximumLearningRate(0.25);
+        controller.train();
 
         print(-1.0, -1.0);
         print(-1.0,  1.0);
