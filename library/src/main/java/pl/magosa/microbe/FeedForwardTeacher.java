@@ -2,6 +2,7 @@ package pl.magosa.microbe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * (c) 2014 Krzysztof Magosa
@@ -10,6 +11,9 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
     protected FeedForwardLayer outputLayer;
     protected ArrayList<FeedForwardLayer> workingLayers;
     protected HashMap<Integer, Double> prevWeightCorrection;
+    protected HashMap<Integer, Double> prevWeightCorrectionBackup;
+    protected HashMap<Integer, Double> weightsBackup;
+    protected HashMap<Integer, Double> thresholdsBackup;
 
     public FeedForwardTeacher(FeedForwardNetwork network) {
         this.network = network;
@@ -26,6 +30,10 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
                 prevWeightCorrection.put(System.identityHashCode(neuron), 0.0);
             }
         }
+
+        prevWeightCorrectionBackup = new HashMap<>();
+        weightsBackup = new HashMap<>();
+        thresholdsBackup = new HashMap<>();
     }
 
     protected void backPropagate(final double[] desired) {
@@ -59,6 +67,36 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
 
                 double thresholdCorrection = learningRate * -1.0 * errorGradient.get(hashId);
                 neuron.applyThresholdCorrection(thresholdCorrection);
+            }
+        }
+    }
+
+    protected void backupParameters() {
+        prevWeightCorrectionBackup.clear();
+        prevWeightCorrectionBackup.putAll(prevWeightCorrection);
+
+        for (FeedForwardLayer layer : workingLayers) {
+            for (Neuron neuron : layer.getNeurons()) {
+                thresholdsBackup.put(System.identityHashCode(neuron), neuron.getThreshold());
+
+                for (Input input : neuron.getInputs()) {
+                    weightsBackup.put(System.identityHashCode(input), input.getWeight());
+                }
+            }
+        }
+    }
+
+    public void rollback() {
+        prevWeightCorrection.clear();
+        prevWeightCorrection.putAll(prevWeightCorrectionBackup);
+
+        for (FeedForwardLayer layer : workingLayers) {
+            for (Neuron neuron : layer.getNeurons()) {
+                neuron.setThreshold(thresholdsBackup.get(System.identityHashCode(neuron)));
+
+                for (Input input : neuron.getInputs()) {
+                    input.setWeight(weightsBackup.get(System.identityHashCode(input)));
+                }
             }
         }
     }
