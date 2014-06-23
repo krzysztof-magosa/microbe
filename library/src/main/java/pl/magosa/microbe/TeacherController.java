@@ -24,6 +24,7 @@ public class TeacherController {
     protected double lastError;
     protected double lastErrorBackup;
     protected long epoch;
+    protected String lastAction;
 
     public TeacherController(final Teacher teacher) {
         this.teacher = teacher;
@@ -111,7 +112,10 @@ public class TeacherController {
         System.out.printf("Previous error = % .10f\n", lastError);
         System.out.printf("Current error  = % .10f\n", currentError);
         System.out.printf("Learning rate  = % .10f\n", learningRate);
+        System.out.printf("Last action    = %s\n", lastAction);
         System.out.println();
+
+        lastAction = "";
     }
 
     public void train() {
@@ -135,9 +139,13 @@ public class TeacherController {
 
                 currentError = currentErrorBackup;
                 lastError = lastErrorBackup;
+
+                lastAction = "rollback, slow down";
             }
             else if (currentError < lastError) {
                 learningRate = learningRate * learningRateIncRatio;
+
+                lastAction = "speed up";
             }
 
             if (learningRate > maximumLearningRate) {
