@@ -135,6 +135,7 @@ public class TeacherController {
 
             if ((currentError / lastError) > maximumErrorIncRatio) {
                 teacher.rollback();
+                teacher.calculateSquaredErrorEpoch();
                 learningRate = learningRate * learningRateDecRatio;
 
                 currentError = currentErrorBackup;
