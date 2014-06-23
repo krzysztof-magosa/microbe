@@ -17,6 +17,7 @@
         <module>and</module>
         <module>or</module>
         <module>xor</module>
+        <module>pixelmatrix</module>
     </modules>
 
     <repositories>
