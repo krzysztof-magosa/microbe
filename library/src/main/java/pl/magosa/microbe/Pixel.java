@@ -3,6 +3,8 @@ package pl.magosa.microbe;
 import java.awt.*;
 
 /**
+ * Class represents one pixel.
+ *
  * (c) 2014 Krzysztof Magosa
  */
 public class Pixel {
