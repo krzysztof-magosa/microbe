@@ -1,6 +1,8 @@
 package pl.magosa.microbe;
 
 /**
+ * Class represents sigmoid transfer function.
+ *
  * (c) 2014 Krzysztof Magosa
  */
 public class SigmoidTransferFunction extends TransferFunction {
