@@ -3,6 +3,8 @@ package pl.magosa.microbe;
 import java.util.HashMap;
 
 /**
+ * Abstract class for any network
+ *
  * (c) 2014 Krzysztof Magosa
  */
 public abstract class Network {
