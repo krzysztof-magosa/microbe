@@ -3,6 +3,8 @@ package pl.magosa.microbe;
 import java.util.Random;
 
 /**
+ * Class represents one input of neuron
+ *
  * (c) 2014 Krzysztof Magosa
  */
 public class Input {
