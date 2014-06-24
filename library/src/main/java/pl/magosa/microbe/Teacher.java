@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
+ * Abstract class represents teacher
+ *
  * (c) 2014 Krzysztof Magosa
  */
 public abstract class Teacher<T extends Network>  {
@@ -33,6 +35,9 @@ public abstract class Teacher<T extends Network>  {
         return lastEpochError;
     }
 
+    /**
+     * Calculates squared error for specified learning set
+     */
     protected double squaredError(LearningSet set) {
         network.setValues(set.getInput());
         network.run();
@@ -49,6 +54,9 @@ public abstract class Teacher<T extends Network>  {
         return error;
     }
 
+    /**
+     * Calculates squared error for all items of training sets.
+     */
     public double calculateSquaredErrorEpoch() {
         double error = 0;
 
@@ -60,6 +68,9 @@ public abstract class Teacher<T extends Network>  {
         return lastEpochError;
     }
 
+    /**
+     * Performs training
+     */
     public boolean train(int maxEpochs, double maxError) {
         if (calculateSquaredErrorEpoch() <= maxError) {
             // Don't train already trained network
