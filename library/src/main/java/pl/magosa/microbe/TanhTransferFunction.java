@@ -1,7 +1,7 @@
 package pl.magosa.microbe;
 
 /**
- * Hyperbolic tangent
+ * Class represents hyperbolic tangent transfer function.
  *
  * (c) 2014 Krzysztof Magosa
  */
