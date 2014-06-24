@@ -1,6 +1,8 @@
 package pl.magosa.microbe;
 
 /**
+ * Class represents step transfer function.
+ *
  * (c) 2014 Krzysztof Magosa
  */
 public class StepTransferFunction extends TransferFunction {
