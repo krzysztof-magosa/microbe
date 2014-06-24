@@ -6,6 +6,8 @@ import org.apache.commons.math3.stat.regression.SimpleRegression;
 import java.util.Map;
 
 /**
+ * Class provides adaptive learning rate for specified teacher.
+ *
  * (c) 2014 Krzysztof Magosa
  */
 public class TeacherController {
@@ -118,6 +120,9 @@ public class TeacherController {
         lastAction = "";
     }
 
+    /**
+     * Performs training, trying to keep learning rate as high as it's possible.
+     */
     public void train() {
         teacher.setLearningRate(learningRate);
 
@@ -133,6 +138,11 @@ public class TeacherController {
             }
             currentError = teacher.getError();
 
+            /**
+             * Maximum error increase ratio has been exceeded.
+             *  - rollback last epoch
+             *  - slow down learning
+             */
             if ((currentError / lastError) > maximumErrorIncRatio) {
                 teacher.rollback();
                 teacher.calculateSquaredErrorEpoch();
@@ -143,6 +153,10 @@ public class TeacherController {
 
                 lastAction = "rollback, slow down";
             }
+            /**
+             * Error of network is smaller than previous.
+             * Try to speed up learning.
+             */
             else if (currentError < lastError) {
                 learningRate = learningRate * learningRateIncRatio;
 
