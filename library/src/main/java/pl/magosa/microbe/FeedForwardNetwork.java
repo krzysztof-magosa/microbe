@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 /**
+ * Class represents multi layer feed forward network.
+ *
  * (c) 2014 Krzysztof Magosa
  */
 public class FeedForwardNetwork extends Network {
@@ -14,6 +16,12 @@ public class FeedForwardNetwork extends Network {
         layers = new ArrayList<>();
     }
 
+    /**
+     * Creates layer, associate it with this network, initialise it using provided lambda.
+     *
+     * @param initFunction Lamba which initialize layer
+     * @return Created layer object
+     */
     public FeedForwardLayer createLayer(Consumer<FeedForwardLayer> initFunction) {
         FeedForwardLayer layer = new FeedForwardLayer();
 
@@ -31,7 +39,7 @@ public class FeedForwardNetwork extends Network {
 
     /**
      * Helper method for easy creation of input layer.
-     * @param inputNeurons
+     * @param inputNeurons Number of neurons (also inputs)
      */
     public void createInputLayer(final int inputNeurons) {
         createLayer((FeedForwardLayer layer) -> {
@@ -92,14 +100,28 @@ public class FeedForwardNetwork extends Network {
         return output;
     }
 
+    /**
+     * Returns last layer in network.
+     * It's useful while creating network, e.g to check number of neurons in previously created layer
+     * to know how many inputs we need in each neuron.
+     * @return Last layer of network
+     */
     public FeedForwardLayer getLastLayer() {
         return layers.get(layers.size() - 1);
     }
 
+    /**
+     * Returns list of layers associated to this network
+     */
     public ArrayList<FeedForwardLayer> getLayers() {
         return layers;
     }
 
+    /**
+     * Returns hash map of neurons associated with layers of this network.
+     * It's used internally to provide consistent interface for KnowledgeIO reader/writer.
+     * @return Hash map of all neurons
+     */
     protected HashMap<String, Neuron> getNeuronsMap() {
         HashMap<String, Neuron> map = new HashMap<>();
 
