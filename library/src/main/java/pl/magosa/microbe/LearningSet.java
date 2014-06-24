@@ -1,6 +1,9 @@
 package pl.magosa.microbe;
 
 /**
+ * LearningSet class is container for input vector and output target.
+ * It's used while network is trained under the supervision.
+ *
  * (c) 2014 Krzysztof Magosa
  */
 public class LearningSet {
