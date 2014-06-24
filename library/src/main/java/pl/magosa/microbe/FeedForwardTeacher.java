@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Class represents back propagation teacher for feed forward network.
+ *
  * (c) 2014 Krzysztof Magosa
  */
 public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
@@ -36,6 +38,10 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
         thresholdsBackup = new HashMap<>();
     }
 
+    /**
+     * Back propagates errors through all layers from output to first hidden.
+     * @param desired Expected output of network.
+     */
     protected void backPropagate(final double[] desired) {
         HashMap<Integer, Double> errorGradient = new HashMap<>();
 
@@ -71,6 +77,9 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
         }
     }
 
+    /**
+     * Backups thresholds and weights of all neurons, so last step may be rollbacked.
+     */
     protected void backupParameters() {
         prevWeightCorrectionBackup.clear();
         prevWeightCorrectionBackup.putAll(prevWeightCorrection);
@@ -86,6 +95,9 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
         }
     }
 
+    /**
+     * Performs rollback restoring thresholds and weights of all neurons to previous state.
+     */
     public void rollback() {
         prevWeightCorrection.clear();
         prevWeightCorrection.putAll(prevWeightCorrectionBackup);
@@ -101,6 +113,9 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
         }
     }
 
+    /**
+     * Performs one epoch of training
+     */
     protected void trainEpoch() {
         for (int index = 0; index < learningData.size(); index++) {
             LearningSet set = learningData.get(index);
