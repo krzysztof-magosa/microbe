@@ -1,6 +1,8 @@
 package pl.magosa.microbe;
 
 /**
+ * Abstract class represents transfer function.
+ *
  * (c) 2014 Krzysztof Magosa
  */
 public abstract class TransferFunction {
@@ -38,6 +40,17 @@ public abstract class TransferFunction {
         return result;
     }
 
+    /**
+     * Normalizes value originating from outside the network
+     * to form suitable for network.
+     *
+     * You can have min>max, for example when you wants black pixel to be active, and white inactive.
+     *
+     * @param value Value to be normalized
+     * @param min Value to be treated as minimum
+     * @param max Value to be treated as maximum
+     * @return Normalized value
+     */
     public double normalize(final double value, final double min, final double max) {
         if (min > max) {
             return normalize(min - value, max, min);
