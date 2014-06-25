@@ -14,8 +14,7 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
     protected ArrayList<FeedForwardLayer> workingLayers;
     protected HashMap<Integer, Double> prevWeightCorrection;
     protected HashMap<Integer, Double> prevWeightCorrectionBackup;
-    protected HashMap<Integer, Double> weightsBackup;
-    protected HashMap<Integer, Double> thresholdsBackup;
+    protected NetworkKnowledge knowledgeBackup;
 
     public FeedForwardTeacher(FeedForwardNetwork network) {
         this.network = network;
@@ -34,8 +33,7 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
         }
 
         prevWeightCorrectionBackup = new HashMap<>();
-        weightsBackup = new HashMap<>();
-        thresholdsBackup = new HashMap<>();
+        knowledgeBackup = new NetworkKnowledge();
     }
 
     /**
@@ -84,15 +82,7 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
         prevWeightCorrectionBackup.clear();
         prevWeightCorrectionBackup.putAll(prevWeightCorrection);
 
-        for (FeedForwardLayer layer : workingLayers) {
-            for (Neuron neuron : layer.getNeurons()) {
-                thresholdsBackup.put(System.identityHashCode(neuron), neuron.getThreshold());
-
-                for (Input input : neuron.getInputs()) {
-                    weightsBackup.put(System.identityHashCode(input), input.getWeight());
-                }
-            }
-        }
+        knowledgeBackup.transferFromNetwork(network);
     }
 
     /**
@@ -102,15 +92,7 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
         prevWeightCorrection.clear();
         prevWeightCorrection.putAll(prevWeightCorrectionBackup);
 
-        for (FeedForwardLayer layer : workingLayers) {
-            for (Neuron neuron : layer.getNeurons()) {
-                neuron.setThreshold(thresholdsBackup.get(System.identityHashCode(neuron)));
-
-                for (Input input : neuron.getInputs()) {
-                    input.setWeight(weightsBackup.get(System.identityHashCode(input)));
-                }
-            }
-        }
+        knowledgeBackup.transferToNetwork(network);
     }
 
     /**
