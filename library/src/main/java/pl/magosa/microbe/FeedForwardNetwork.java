@@ -41,8 +41,8 @@ public class FeedForwardNetwork extends Network {
      * Helper method for easy creation of input layer.
      * @param inputNeurons Number of neurons (also inputs)
      */
-    public void createInputLayer(final int inputNeurons) {
-        createLayer((FeedForwardLayer layer) -> {
+    public FeedForwardLayer createInputLayer(final int inputNeurons) {
+        return createLayer((FeedForwardLayer layer) -> {
             layer.createNeurons(inputNeurons, (Neuron neuron) -> {
                 neuron.setTransferFunction(new LinearTransferFunction());
                 neuron.setThreshold(0);
