@@ -53,10 +53,10 @@ public class Main {
         teacher.setMomentum(0.7);
 
         // Truth table
-        teacher.addLearningSet(new LearningSet(new double[] { -1.0, -1.0 }, new double[] { -1.0 }));
-        teacher.addLearningSet(new LearningSet(new double[] { -1.0,  1.0 }, new double[] {  1.0 }));
-        teacher.addLearningSet(new LearningSet(new double[] {  1.0, -1.0 }, new double[] {  1.0 }));
-        teacher.addLearningSet(new LearningSet(new double[] {  1.0,  1.0 }, new double[] { -1.0 }));
+        teacher.addLearningSet(new double[] { -1.0, -1.0 }, new double[] { -1.0 });
+        teacher.addLearningSet(new double[] { -1.0,  1.0 }, new double[] {  1.0 });
+        teacher.addLearningSet(new double[] {  1.0, -1.0 }, new double[] {  1.0 });
+        teacher.addLearningSet(new double[] {  1.0,  1.0 }, new double[] { -1.0 });
 
         // Train
         TeacherController controller = new TeacherController(teacher);
