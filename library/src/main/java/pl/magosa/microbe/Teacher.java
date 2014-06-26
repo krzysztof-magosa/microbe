@@ -27,6 +27,15 @@ public abstract class Teacher<T extends Network>  {
         this.momentum = momentum;
     }
 
+    public void addLearningSet(final double input[], final double output[]) {
+        learningData.add(
+            new LearningSet(
+                input,
+                output
+            )
+        );
+    }
+
     public void addLearningSet(final LearningSet set) {
         learningData.add(set);
     }
