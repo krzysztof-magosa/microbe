@@ -49,12 +49,24 @@ public class TanhTransferFunctionTest {
 
     @Test
     public void normalize() {
-        assertEquals(-1.0, transferFunction.normalize(0, 0, 5), 0.01);
-        assertEquals(0.0, transferFunction.normalize(128, 0, 255), 0.01);
-        assertEquals(-0.5, transferFunction.normalize(250, 0, 1000), 0.01);
+        // Normal range                                val   min   max
+        assertEquals(-1.0, transferFunction.normalize(   0,    0,    5), 0.01);
+        assertEquals(-0.5, transferFunction.normalize( 250,    0, 1000), 0.01);
+        assertEquals( 0.0, transferFunction.normalize( 128,    0,  255), 0.01);
 
-        assertEquals(1.0, transferFunction.normalize(0, 5, 0), 0.01);
-        assertEquals(0.0, transferFunction.normalize(128, 255, 0), 0.01);
-        assertEquals(0.5, transferFunction.normalize(250, 1000, 0), 0.01);
+        // Range with negative minimum                 val   min   max
+        assertEquals(-1.0, transferFunction.normalize(-100, -100,  100), 0.01);
+        assertEquals( 0.0, transferFunction.normalize(   0, -100,  100), 0.01);
+        assertEquals( 1.0, transferFunction.normalize( 100, -100,  100), 0.01);
+
+        // Reversed range                              val   min   max
+        assertEquals( 1.0, transferFunction.normalize(   0,    5,    0), 0.01);
+        assertEquals( 0.0, transferFunction.normalize( 128,  255,    0), 0.01);
+        assertEquals( 0.5, transferFunction.normalize( 250, 1000,    0), 0.01);
+
+        // Reversed range with negative maximum        val   min   max
+        assertEquals( 1.0, transferFunction.normalize(-100,  100, -100), 0.01);
+        assertEquals( 0.0, transferFunction.normalize(   0,  100, -100), 0.01);
+        assertEquals(-1.0, transferFunction.normalize( 100,  100, -100), 0.01);
     }
 }
