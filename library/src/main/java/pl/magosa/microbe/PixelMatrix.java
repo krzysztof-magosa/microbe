@@ -145,6 +145,34 @@ public class PixelMatrix {
     }
 
     /**
+     * Checks whether all pixels in specified vertical line are empty.
+     * Lambda should return true when pixel is not empty, and false when it's empty.
+     */
+    public boolean isVLineEmpty(final int x, Function<Pixel, Boolean> isNotEmpty) {
+        for (int y = 0; y < height; y++) {
+            if (isNotEmpty.apply(get(x, y))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks whether all pixels in specified horizontal line are empty.
+     * Lambda should return true when pixel is not empty, and false when it's empty.
+     */
+    public boolean isHLineEmpty(final int y, Function<Pixel, Boolean> isNotEmpty) {
+        for (int x = 0; x < width; x++) {
+            if (isNotEmpty.apply(get(x, y))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Creates new instance of images, and transform all pixels there.
      * @return
      */
