@@ -1,5 +1,6 @@
 package pl.magosa.microbe;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -87,5 +88,59 @@ public class PixelMatrix {
         }
 
         return result;
+    }
+
+    /**
+     * Downsample image to lower resolution.
+     *
+     * @param targetWidth width of new image
+     * @param targetHeight height of new image
+     * @return New instance of pixelmatrix with downsampled image
+     */
+    public PixelMatrix downsample(final int targetWidth, final int targetHeight) {
+        PixelMatrix target = new PixelMatrix(targetWidth, targetHeight);
+
+        final double ratioX = (double)width / (double)targetWidth;
+        final double ratioY = (double)height / (double)targetHeight;
+
+        for (int targetY = 0; targetY < targetHeight; targetY++) {
+            for (int targetX = 0; targetX < targetWidth; targetX++) {
+                Pixel pixel = target.get(targetX, targetY);
+
+                int totalPixels = 0;
+                double red = 0.0;
+                double green = 0.0;
+                double blue = 0.0;
+
+                // Calculate region which needs to be downsamples to one pixel
+                int startX = (int)(targetX * ratioX);
+                int startY = (int)(targetY * ratioY);
+                int stopX = (int)(startX + ratioX);
+                int stopY = (int)(startY + ratioY);
+
+                // Don't go outside image
+                stopX = Math.min(stopX, width);
+                stopY = Math.min(stopY, height);
+
+                // Process at least one pixel
+                stopX = Math.max(startX+1, stopX);
+                stopY = Math.max(startY+1, stopY);
+
+                for (int y = startY; y < stopY; y++) {
+                    for (int x = startX; x < stopX; x++) {
+                        red += get(x, y).getRed();
+                        green += get(x, y).getGreen();
+                        blue += get(x, y).getBlue();
+                        totalPixels++;
+                    }
+                }
+
+                pixel.setRed(red / (double)totalPixels);
+                pixel.setGreen(green / (double)totalPixels);
+                pixel.setBlue(blue / (double)totalPixels);
+            }
+        }
+
+        return target;
     }
 }
