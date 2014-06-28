@@ -214,6 +214,18 @@ public class PixelMatrix {
     }
 
     /**
+     * Draws specified matrix into current.
+     * targetX, targetY specified left corner of drawing.
+     */
+    public void draw(PixelMatrix source, final int targetX, final int targetY) {
+        for (int y = 0; y < source.height; y++) {
+            for (int x = 0; x < source.width; x++) {
+                get(targetX + x, targetY + y).setRGB(source.get(x, y).getRGB());
+            }
+        }
+    }
+
+    /**
      * Creates new instance of images, and transform all pixels there.
      * @return
      */
