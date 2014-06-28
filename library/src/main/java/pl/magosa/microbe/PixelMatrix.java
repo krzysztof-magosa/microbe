@@ -173,6 +173,47 @@ public class PixelMatrix {
     }
 
     /**
+     * Returns rectangle which defines not empty region of image.
+     * Lambda should return true when pixel is not empty, and false when it's empty.
+     */
+    public Rectangle findBounds(Function<Pixel, Boolean> isNotEmpty) {
+        int y1 = 0;
+        int y2 = 0;
+        int x1 = 0;
+        int x2 = 0;
+
+        for (int y = 0; y < height; y++) {
+            if (!isHLineEmpty(y, isNotEmpty)) {
+                y1 = y;
+                break;
+            }
+        }
+
+        for (int y = height-1; y >= 0; y--) {
+            if (!isHLineEmpty(y, isNotEmpty)) {
+                y2 = y;
+                break;
+            }
+        }
+
+        for (int x = 0; x < width; x++) {
+            if (!isVLineEmpty(x, isNotEmpty)) {
+                x1 = x;
+                break;
+            }
+        }
+
+        for (int x = width-1; x >= 0; x--) {
+            if (!isVLineEmpty(x, isNotEmpty)) {
+                x2 = x;
+                break;
+            }
+        }
+
+        return new Rectangle(x1, y1, x2-x1, y2-y1);
+    }
+
+    /**
      * Creates new instance of images, and transform all pixels there.
      * @return
      */
