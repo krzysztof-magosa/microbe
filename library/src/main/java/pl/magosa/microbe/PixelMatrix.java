@@ -226,6 +226,28 @@ public class PixelMatrix {
     }
 
     /**
+     * Crops region specified by edge points into new matrix.
+     */
+    public PixelMatrix crop(final int x1, final int y1, final int x2, final int y2) {
+        PixelMatrix target = new PixelMatrix(x2-x1+1, y2-y1+1);
+
+        for (int y = y1, targetY = 0; y <= y2; y++, targetY++) {
+            for (int x = x1, targetX = 0; x <= x2; x++, targetX++) {
+                target.get(targetX, targetY).setRGB(get(x, y).getRGB());
+            }
+        }
+
+        return target;
+    }
+
+    /**
+     * Crops specified rectangle into new matrix.
+     */
+    public PixelMatrix crop(Rectangle rect) {
+        return crop(rect.x, rect.y, rect.x+rect.width, rect.y+rect.height);
+    }
+
+    /**
      * Creates new instance of images, and transform all pixels there.
      * @return
      */
