@@ -61,6 +61,17 @@ public class Pixel {
         return blue;
     }
 
+    public int getRGB() {
+        int r = (int)(getRed() * 255.0);
+        int g = (int)(getGreen() * 255.0);
+        int b = (int)(getBlue() * 255.0);
+
+        return
+            ((r & 0xFF) << 16) |
+            ((g & 0xFF) << 8)  |
+            ((b & 0xFF) << 0);
+    }
+
     public void setRGB(final int rgb) {
         setRed((rgb >> 16) & 0xFF);
         setGreen((rgb >> 8) & 0xFF);
