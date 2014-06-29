@@ -12,4 +12,12 @@ public abstract class Network {
     abstract public void setValues(final double[] values);
     abstract public double[] getOutput();
     abstract protected HashMap<String, Neuron> getNeuronsMap();
+
+    public void printOutput() {
+        double[] output = getOutput();
+
+        for (int i = 0; i < output.length; i++) {
+            System.out.printf("output[%d] = % .2f\n", i, output[i]);
+        }
+    }
 }
