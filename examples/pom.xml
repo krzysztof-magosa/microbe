@@ -18,6 +18,7 @@
         <module>or</module>
         <module>xor</module>
         <module>pixelmatrix</module>
+        <module>normalize</module>
     </modules>
 
     <repositories>
