@@ -12,6 +12,11 @@ import java.util.function.Function;
  * (c) 2014 Krzysztof Magosa
  */
 public class PixelMatrix {
+    public enum TransformMode {
+        MODE_GRAY,
+        MODE_RELATIVE_LUMINANCE,
+        MODE_RGB,
+    };
     protected Pixel[][] data;
     protected int width;
     protected int height;
@@ -88,6 +93,37 @@ public class PixelMatrix {
         }
 
         return result;
+    }
+
+    public double[] transformToArray(TransformMode mode) {
+        if (TransformMode.MODE_GRAY == mode) {
+            return transformToArray(
+                (Pixel pixel) -> (
+                    new Double[] { pixel.getGrayBrightness() }
+                )
+            );
+        }
+        else if (TransformMode.MODE_RELATIVE_LUMINANCE == mode) {
+            return transformToArray(
+                (Pixel pixel) -> (
+                    new Double[] { pixel.getRelativeLuminance() }
+                )
+            );
+        }
+        else if (TransformMode.MODE_RGB == mode) {
+            return transformToArray(
+                (Pixel pixel) -> (
+                    new Double[] {
+                        pixel.getRed(),
+                        pixel.getGreen(),
+                        pixel.getBlue()
+                    }
+                )
+            );
+        }
+        else {
+            throw new RuntimeException("Unsupported mode.");
+        }
     }
 
     /**
