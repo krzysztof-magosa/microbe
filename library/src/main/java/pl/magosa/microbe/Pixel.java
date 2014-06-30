@@ -89,4 +89,10 @@ public class Pixel {
     public double getGrayBrightness() {
         return (red + green + blue) / 3.0;
     }
+
+    public void setGrayBrightness(final double value) {
+        setRed(value);
+        setGreen(value);
+        setBlue(value);
+    }
 }
