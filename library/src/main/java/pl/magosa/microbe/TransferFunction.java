@@ -68,4 +68,14 @@ public abstract class TransferFunction {
     public double denormalize(final double value, final double min, final double max) {
         return min + (((value - getLowerLimit()) / (getUpperLimit() - getLowerLimit())) * (max - min));
     }
+
+    public double[] denormalize(final double[] values, final double min, final double max) {
+        double[] result = new double[values.length];
+
+        for (int i = 0; i < values.length; i++) {
+            result[i] = denormalize(values[i], min, max);
+        }
+
+        return result;
+    }
 }
