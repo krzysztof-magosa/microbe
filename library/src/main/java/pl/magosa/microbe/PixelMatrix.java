@@ -306,4 +306,17 @@ public class PixelMatrix {
             }
         }
     }
+
+    public PixelMatrix pad(final int size, final Color color) {
+        PixelMatrix result = new PixelMatrix(width+(size*2), height+(size*2));
+        result.apply(
+            (Pixel pixel) -> {
+                pixel.setColor(color);
+            }
+        );
+
+        result.draw(this, size, size);
+
+        return result;
+    }
 }
