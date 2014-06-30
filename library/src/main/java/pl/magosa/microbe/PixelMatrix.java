@@ -298,4 +298,12 @@ public class PixelMatrix {
 
         return image;
     }
+
+    public void apply(Consumer<Pixel> func) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                func.accept(get(x, y));
+            }
+        }
+    }
 }
