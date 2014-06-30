@@ -55,6 +55,16 @@ public abstract class TransferFunction {
         return getLowerLimit() + (((value - min) / (max - min)) * (getUpperLimit() - getLowerLimit()));
     }
 
+    public double[] normalize(final double[] values, final double min, final double max) {
+        double[] result = new double[values.length];
+
+        for (int i = 0; i < values.length; i++) {
+            result[i] = normalize(values[i], min, max);
+        }
+
+        return result;
+    }
+
     public double denormalize(final double value, final double min, final double max) {
         return min + (((value - getLowerLimit()) / (getUpperLimit() - getLowerLimit())) * (max - min));
     }
