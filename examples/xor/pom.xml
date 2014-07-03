@@ -6,13 +6,13 @@
 
     <groupId>pl.magosa.microbe.examples</groupId>
     <artifactId>xor</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <parent>
         <artifactId>parent</artifactId>
         <groupId>pl.magosa.microbe.examples</groupId>
-        <version>0.0.2</version>
+        <version>0.0.3-SNAPSHOT</version>
     </parent>
 
     <properties>
