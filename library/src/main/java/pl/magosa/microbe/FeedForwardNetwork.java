@@ -133,4 +133,114 @@ public class FeedForwardNetwork extends Network {
 
         return map;
     }
+
+    public static Builder newInstance() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private boolean isBuilt;
+        private int inputs;
+        private ArrayList<LayerDefinition> hiddenLayers;
+        private LayerDefinition outputLayer;
+        private FeedForwardNetwork instance;
+
+        private class LayerDefinition {
+            private final int neuronsCount;
+            private final TransferFunction function;
+            private final boolean hasBias;
+
+            private LayerDefinition(int neuronsCount, TransferFunction function, boolean hasBias) {
+                this.neuronsCount = neuronsCount;
+                this.function = function;
+                this.hasBias = hasBias;
+            }
+        }
+
+        private Builder() {
+            hiddenLayers = new ArrayList<>();;
+        }
+
+        public Builder inputLayer(int inputs) {
+            this.inputs = inputs;
+            return this;
+        }
+
+        public Builder hiddenLayer(int neuronsCount, TransferFunction function, boolean hasBias) {
+            hiddenLayers.add(
+                new LayerDefinition(
+                    neuronsCount,
+                    function,
+                    hasBias
+                )
+            );
+
+            return this;
+        }
+
+        public Builder hiddenLayer(int neuronsCount, TransferFunction function) {
+            return hiddenLayer(neuronsCount, function, true);
+        }
+
+        public Builder outputLayer(int neuronsCount, TransferFunction function, boolean hasBias) {
+            outputLayer = new LayerDefinition(
+                neuronsCount,
+                function,
+                hasBias
+            );
+
+            return this;
+        }
+
+        public Builder outputLayer(int neuronsCount, TransferFunction function) {
+            return outputLayer(neuronsCount, function, true);
+        }
+
+        private void createLayer(LayerDefinition definition) {
+            instance.createLayer((FeedForwardLayer layer) -> {
+                layer.createNeurons(definition.neuronsCount, (Neuron neuron) -> {
+                    if (definition.hasBias) {
+                        neuron.createBias();
+                    }
+
+                    neuron.setTransferFunction(definition.function);
+                    neuron.createInputs(instance.getLastLayer().getNeurons().size());
+                });
+            });
+        }
+
+        private void validateState() {
+            if (isBuilt) {
+                throw new IllegalStateException("Network has been already built.");
+            }
+
+            if (inputs <= 0) {
+                throw new IllegalStateException("Network must have input layer.");
+            }
+
+            if (hiddenLayers.isEmpty()) {
+                throw new IllegalStateException("Network must have at least one hidden layer.");
+            }
+
+            if (outputLayer == null) {
+                throw new IllegalStateException("Network must have output layer.");
+            }
+        }
+
+        public FeedForwardNetwork build() {
+            validateState();
+
+            instance = new FeedForwardNetwork();
+
+            instance.createInputLayer(inputs);
+            for (LayerDefinition definition : hiddenLayers) {
+                createLayer(definition);
+            }
+            createLayer(outputLayer);
+
+            isBuilt = true;
+
+            return instance;
+        }
+    }
 }
