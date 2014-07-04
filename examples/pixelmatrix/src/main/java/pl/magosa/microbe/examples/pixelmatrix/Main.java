@@ -41,30 +41,14 @@ public class Main {
     }
 
     protected void init() {
-        network = new FeedForwardNetwork();
         transferFunction = new TanhTransferFunction();
 
-        // Input layer (one neuron per pixel in the picture)
-        network.createInputLayer(width * height);
+        network = FeedForwardNetwork.newInstance()
+            .inputLayer(width * height)
+            .hiddenLayer(3, transferFunction)
+            .outputLayer(symbols.length, transferFunction)
+            .build();
 
-        // Hidden layer
-        network.createLayer((FeedForwardLayer layer) -> {
-            layer.createNeurons(3, (Neuron neuron) -> {
-                neuron.setTransferFunction(transferFunction);
-                neuron.createBias();
-                neuron.createInputs(network.getLastLayer().getNeurons().size());
-            });
-        });
-
-        // Output layer
-        // one neuron per symbol
-        network.createLayer((FeedForwardLayer layer) -> {
-            layer.createNeurons(symbols.length, (Neuron neuron) -> {
-                neuron.setTransferFunction(transferFunction);
-                neuron.createBias();
-                neuron.createInputs(network.getLastLayer().getNeurons().size());
-            });
-        });
     }
 
     protected void teach() throws IOException {
