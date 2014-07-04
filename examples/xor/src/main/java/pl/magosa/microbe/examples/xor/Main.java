@@ -25,29 +25,13 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        network = new FeedForwardNetwork();
         transferFunction = new TanhTransferFunction();
 
-        // Input layer
-        network.createInputLayer(2);
-
-        // Hidden layer
-        network.createLayer((FeedForwardLayer layer) -> {
-            layer.createNeurons(3, (Neuron neuron) -> {
-                neuron.setTransferFunction(transferFunction);
-                neuron.createBias();
-                neuron.createInputs(network.getLastLayer().getNeurons().size());
-            });
-        });
-
-        // Output layer
-        network.createLayer((FeedForwardLayer layer) -> {
-            layer.createNeurons(1, (Neuron neuron) -> {
-                neuron.setTransferFunction(transferFunction);
-                neuron.createBias();
-                neuron.createInputs(network.getLastLayer().getNeurons().size());
-            });
-        });
+        network = FeedForwardNetwork.newInstance()
+            .inputLayer(2)
+            .hiddenLayer(3, transferFunction)
+            .outputLayer(1, transferFunction)
+            .build();
 
         Teacher teacher = Teacher.factory(network);
         teacher.setMomentum(0.7);
