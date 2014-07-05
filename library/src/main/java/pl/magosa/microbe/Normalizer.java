@@ -39,7 +39,27 @@ public class Normalizer {
         return outputMin + (((value - inputMin) / (inputMax - inputMin)) * (outputMax - outputMin));
     }
 
+    public double[] normalize(final double[] values) {
+        double[] result = new double[values.length];
+
+        for (int i = 0; i < values.length; i++) {
+            result[i] = normalize(values[i]);
+        }
+
+        return result;
+    }
+
     public double denormalize(final double value) {
         return inputMin + (((value - outputMin) / (outputMax - outputMin)) * (inputMax - inputMin));
+    }
+
+    public double[] denormalize(final double[] values) {
+        double[] result = new double[values.length];
+
+        for (int i = 0; i < values.length; i++) {
+            result[i] = denormalize(values[i]);
+        }
+
+        return result;
     }
 }

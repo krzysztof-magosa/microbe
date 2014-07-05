@@ -2,6 +2,7 @@ package pl.magosa.microbe;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -72,5 +73,29 @@ public class NormalizerTest {
         assertEquals(-100.0, normalizer.denormalize(0.0), 0.001);
         assertEquals(-150.0, normalizer.denormalize(0.5), 0.001);
         assertEquals(-200.0, normalizer.denormalize(1.0), 0.001);
+    }
+
+    @Test
+    public void normalizeArray() {
+        Normalizer normalizer = new Normalizer();
+        normalizer.setInputRange(0.0, 255.0);
+        normalizer.setOutputRange(0.0, 1.0);
+
+        double[] values = { 0.0, 127.5, 255.0 };
+        double[] expected = { 0.0, 0.5, 1.0 };
+
+        assertArrayEquals(expected, normalizer.normalize(values), 0.001);
+    }
+
+    @Test
+    public void denormalizeArray() {
+        Normalizer normalizer = new Normalizer();
+        normalizer.setInputRange(0.0, 255.0);
+        normalizer.setOutputRange(0.0, 1.0);
+
+        double[] values = { 0.0, 0.5, 1.0 };
+        double[] expected = { 0.0, 127.5, 255.0 };
+
+        assertArrayEquals(expected, normalizer.denormalize(values), 0.001);
     }
 }
