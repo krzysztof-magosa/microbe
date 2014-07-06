@@ -15,17 +15,21 @@ import pl.magosa.microbe.*;
 public class Main {
     protected static FeedForwardNetwork network;
     protected static TransferFunction transferFunction;
+    protected static Normalizer normalizer;
 
     private static void print(final double x, final double y) {
-        network.setValues(new double[] { x, y });
+        network.setValues(normalizer.normalize(new double[] { x, y }));
         network.run();
         double[] output = network.getOutput();
 
-        System.out.printf("(% .0f xor % .0f) -> % .0f\n", x, y, output[0]);
+        System.out.printf("(%.0f xor %.0f) -> % .0f\n", x, y, normalizer.denormalize(output[0]));
     }
 
     public static void main(String[] args) {
         transferFunction = new TanhTransferFunction();
+        normalizer = new Normalizer();
+        normalizer.setInputRange(0.0, 1.0);
+        normalizer.setOutputRange(transferFunction.getLowerLimit(), transferFunction.getUpperLimit());
 
         network = FeedForwardNetwork.newInstance()
             .inputLayer(2)
@@ -37,10 +41,22 @@ public class Main {
         teacher.setMomentum(0.7);
 
         // Truth table
-        teacher.addLearningSet(new double[] { -1.0, -1.0 }, new double[] { -1.0 });
-        teacher.addLearningSet(new double[] { -1.0,  1.0 }, new double[] {  1.0 });
-        teacher.addLearningSet(new double[] {  1.0, -1.0 }, new double[] {  1.0 });
-        teacher.addLearningSet(new double[] {  1.0,  1.0 }, new double[] { -1.0 });
+        teacher.addLearningSet(
+            normalizer.normalize(new double[] { 0.0, 0.0 }),
+            normalizer.normalize(new double[] { 0.0 })
+        );
+        teacher.addLearningSet(
+            normalizer.normalize(new double[] { 0.0, 1.0 }),
+            normalizer.normalize(new double[] { 1.0 })
+        );
+        teacher.addLearningSet(
+            normalizer.normalize(new double[] { 1.0, 0.0 }),
+            normalizer.normalize(new double[] { 1.0 })
+        );
+        teacher.addLearningSet(
+            normalizer.normalize(new double[] { 1.0, 1.0 }),
+            normalizer.normalize(new double[] { 0.0 })
+        );
 
         // Train
         TeacherController controller = new TeacherController(teacher);
@@ -49,9 +65,9 @@ public class Main {
         controller.setMaximumLearningRate(0.25);
         controller.train();
 
-        print(-1.0, -1.0);
-        print(-1.0,  1.0);
-        print( 1.0, -1.0);
-        print( 1.0,  1.0);
+        print(0.0, 0.0);
+        print(0.0, 1.0);
+        print(1.0, 0.0);
+        print(1.0, 1.0);
     }
 }
