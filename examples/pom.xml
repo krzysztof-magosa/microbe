@@ -6,7 +6,7 @@
 
     <groupId>pl.magosa.microbe.examples</groupId>
     <artifactId>parent</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.3</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>pl.magosa.microbe</groupId>
             <artifactId>library</artifactId>
-            <version>0.0.3-SNAPSHOT</version>
+            <version>0.0.3</version>
         </dependency>
     </dependencies>
 </project>
