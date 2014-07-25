@@ -25,9 +25,6 @@ public class NetworkKnowledgeTest {
         });
 
         // Set some initial parameters
-        input.getNeurons().get(0).getInput(0).setWeight(0.11);
-        input.getNeurons().get(1).getInput(0).setWeight(0.21);
-
         hidden.getNeurons().get(0).getInput(0).setWeight(0.31);
         hidden.getNeurons().get(1).getInput(0).setWeight(0.41);
 
@@ -38,9 +35,6 @@ public class NetworkKnowledgeTest {
         NetworkKnowledge knowledge = NetworkKnowledge.factory(network);
 
         // Change parameters
-        input.getNeurons().get(0).getInput(0).setWeight(1.11);
-        input.getNeurons().get(1).getInput(0).setWeight(1.21);
-
         hidden.getNeurons().get(0).getInput(0).setWeight(1.31);
         hidden.getNeurons().get(1).getInput(0).setWeight(1.41);
 
@@ -51,9 +45,6 @@ public class NetworkKnowledgeTest {
         knowledge.transferToNetwork(network);
 
         // Check whether everything has been restored
-        assertEquals(0.11, input.getNeurons().get(0).getInput(0).getWeight(), 0.001);
-        assertEquals(0.21, input.getNeurons().get(1).getInput(0).getWeight(), 0.001);
-
         assertEquals(0.31, hidden.getNeurons().get(0).getInput(0).getWeight(), 0.001);
         assertEquals(0.41, hidden.getNeurons().get(1).getInput(0).getWeight(), 0.001);
 

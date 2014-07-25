@@ -42,15 +42,10 @@ public class FeedForwardNetwork extends Network {
      * @param inputNeurons Number of neurons (also inputs)
      */
     public Layer createInputLayer(final int inputNeurons) {
-        return createLayer((Layer layer) -> {
-            layer.createNeurons(inputNeurons, (Neuron neuron) -> {
-                neuron.setTransferFunction(new LinearTransferFunction());
+        Layer layer = new InputLayer(inputNeurons);
+        layers.add(layer);
 
-                neuron.createInput((Input input) -> {
-                    input.setWeight(1);
-                });
-            });
-        });
+        return layer;
     }
 
     /**
@@ -65,7 +60,8 @@ public class FeedForwardNetwork extends Network {
         ArrayList<Neuron> neurons = layers.get(0).getNeurons();
 
         for (int index = 0; index < values.length; index++) {
-            neurons.get(index).getInputs().get(0).setValue(values[index]);
+            InputNeuron neuron = (InputNeuron)neurons.get(index);
+            neuron.setInput(values[index]);
         }
     }
 
