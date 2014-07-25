@@ -45,7 +45,6 @@ public class FeedForwardNetwork extends Network {
         return createLayer((FeedForwardLayer layer) -> {
             layer.createNeurons(inputNeurons, (Neuron neuron) -> {
                 neuron.setTransferFunction(new LinearTransferFunction());
-                neuron.setThreshold(0);
 
                 neuron.createInput((Input input) -> {
                     input.setWeight(1);

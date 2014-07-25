@@ -22,8 +22,10 @@ public class Main {
     public static void main(String[] args) {
         neuron = new Neuron();
 
-        neuron.setTransferFunction(new StepTransferFunction());
-        neuron.setThreshold(1);
+        StepTransferFunction transferFunction = new StepTransferFunction();
+        transferFunction.setThreshold(1.0);
+
+        neuron.setTransferFunction(transferFunction);
         neuron.createInputs(2, (Input input) -> {
             input.setWeight(1);
         });

@@ -10,7 +10,6 @@ import java.util.function.Consumer;
  * (c) 2014 Krzysztof Magosa
  */
 public class Neuron {
-    protected double threshold;
     protected double output;
     protected double sum;
     protected boolean hasBias;
@@ -18,7 +17,6 @@ public class Neuron {
     protected TransferFunction transferFunction;
 
     public Neuron() {
-        threshold = -0.5 + Math.random();
         inputs = new ArrayList<>();
     }
 
@@ -77,18 +75,6 @@ public class Neuron {
         return inputs;
     }
 
-    public void setThreshold(final double threshold) {
-        this.threshold = threshold;
-    }
-
-    public void applyThresholdCorrection(final double correction) {
-        this.threshold += correction;
-    }
-
-    public double getThreshold() {
-        return threshold;
-    }
-
     public double getOutput() {
         return output;
     }
@@ -101,7 +87,7 @@ public class Neuron {
      * Calculates output of neuron.
      */
     public void activate() {
-        sum = -threshold;
+        sum = 0;
 
         for (Input input : inputs) {
             sum += (input.getWeight() * input.getValue());

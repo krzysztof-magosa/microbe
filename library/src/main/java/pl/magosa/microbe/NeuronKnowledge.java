@@ -9,7 +9,6 @@ import java.util.Map;
  * (c) 2014 Krzysztof Magosa
  */
 public class NeuronKnowledge {
-    protected double threshold;
     protected HashMap<Integer, Double> inputs;
 
     public NeuronKnowledge() {
@@ -35,8 +34,6 @@ public class NeuronKnowledge {
      * @param neuron Neuron to knowledge should be transferred
      */
     public void transferToNeuron(final Neuron neuron) {
-        neuron.setThreshold(threshold);
-
         for (Map.Entry<Integer, Double> entry : inputs.entrySet()) {
             neuron.getInputs().get(entry.getKey()).setWeight(entry.getValue());
         }
@@ -48,8 +45,6 @@ public class NeuronKnowledge {
      * @param neuron Neuron from knowledge should be transferred
      */
     public void transferFromNeuron(final Neuron neuron) {
-        threshold = neuron.getThreshold();
-
         inputs.clear();
         for (int i = 0; i < neuron.getInputs().size(); i++) {
             inputs.put(i, neuron.getInputs().get(i).getWeight());

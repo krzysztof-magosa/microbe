@@ -68,9 +68,6 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
                     input.setWeight(newWeight);
                     prevWeightCorrection.put(hashId, correction);
                 }
-
-                double thresholdCorrection = learningRate * -1.0 * errorGradient.get(hashId);
-                neuron.applyThresholdCorrection(thresholdCorrection);
             }
         }
     }
