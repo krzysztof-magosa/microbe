@@ -8,12 +8,12 @@ import java.util.function.Consumer;
  *
  * (c) 2014 Krzysztof Magosa
  */
-public class FeedForwardLayer {
+public class Layer {
     protected ArrayList<Neuron> neurons;
-    protected FeedForwardLayer previousLayer;
-    protected FeedForwardLayer nextLayer;
+    protected Layer previousLayer;
+    protected Layer nextLayer;
 
-    public FeedForwardLayer() {
+    public Layer() {
         neurons = new ArrayList<>();
     }
 
@@ -41,7 +41,7 @@ public class FeedForwardLayer {
     /**
      * Returns next layer if any, null otherwise
      */
-    public FeedForwardLayer getNextLayer() {
+    public Layer getNextLayer() {
         return nextLayer;
     }
 
@@ -49,14 +49,14 @@ public class FeedForwardLayer {
      * Used internally to set next layer
      * @param layer Next layer
      */
-    protected void setNextLayer(final FeedForwardLayer layer) {
+    protected void setNextLayer(final Layer layer) {
         nextLayer = layer;
     }
 
     /**
      * Returns previous layer if any, null otherwise
      */
-    public FeedForwardLayer getPreviousLayer() {
+    public Layer getPreviousLayer() {
         return previousLayer;
     }
 
@@ -66,7 +66,7 @@ public class FeedForwardLayer {
      *
      * @param layer Previous layer
      */
-    public void setPreviousLayer(final FeedForwardLayer layer) {
+    public void setPreviousLayer(final Layer layer) {
         previousLayer = layer;
         previousLayer.setNextLayer(this);
     }

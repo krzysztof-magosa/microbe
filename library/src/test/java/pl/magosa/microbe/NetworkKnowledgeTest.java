@@ -12,13 +12,13 @@ public class NetworkKnowledgeTest {
     public void test() {
         // Initialize simple network
         FeedForwardNetwork network = new FeedForwardNetwork();
-        FeedForwardLayer input = network.createInputLayer(2);
-        FeedForwardLayer hidden = network.createLayer((FeedForwardLayer layer) -> {
+        Layer input = network.createInputLayer(2);
+        Layer hidden = network.createLayer((Layer layer) -> {
             layer.createNeurons(2, (Neuron neuron) -> {
                 neuron.createInputs(1);
             });
         });
-        FeedForwardLayer output = network.createLayer((FeedForwardLayer layer) -> {
+        Layer output = network.createLayer((Layer layer) -> {
             layer.createNeurons(2, (Neuron neuron) -> {
                 neuron.createInputs(1);
             });

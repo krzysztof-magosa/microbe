@@ -7,10 +7,10 @@ import static org.junit.Assert.*;
 /**
  * (c) 2014 Krzysztof Magosa
  */
-public class FeedForwardLayerTest {
+public class LayerTest {
     @Test
     public void testCreateNeurons() {
-        FeedForwardLayer layer = new FeedForwardLayer();
+        Layer layer = new Layer();
         layer.createNeurons(10, (Neuron neuron) -> {});
 
         assertEquals(10, layer.getNeurons().size());
@@ -18,8 +18,8 @@ public class FeedForwardLayerTest {
 
     @Test
     public void testJumpsBetweenLayers() {
-        FeedForwardLayer layer1 = new FeedForwardLayer();
-        FeedForwardLayer layer2 = new FeedForwardLayer();
+        Layer layer1 = new Layer();
+        Layer layer2 = new Layer();
         layer2.setPreviousLayer(layer1);
 
         assertEquals(layer1, layer2.getPreviousLayer());

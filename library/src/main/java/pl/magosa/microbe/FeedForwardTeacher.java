@@ -10,8 +10,8 @@ import java.util.Map;
  * (c) 2014 Krzysztof Magosa
  */
 public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
-    protected FeedForwardLayer outputLayer;
-    protected ArrayList<FeedForwardLayer> workingLayers;
+    protected Layer outputLayer;
+    protected ArrayList<Layer> workingLayers;
     protected HashMap<Integer, Double> prevWeightCorrection;
     protected HashMap<Integer, Double> prevWeightCorrectionBackup;
     protected NetworkKnowledge knowledgeBackup;
@@ -26,7 +26,7 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
         }
 
         prevWeightCorrection = new HashMap<>();
-        for (FeedForwardLayer layer : workingLayers) {
+        for (Layer layer : workingLayers) {
             for (Neuron neuron : layer.getNeurons()) {
                 prevWeightCorrection.put(System.identityHashCode(neuron), 0.0);
             }
@@ -43,7 +43,7 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
     protected void backPropagate(final double[] desired) {
         HashMap<Integer, Double> errorGradient = new HashMap<>();
 
-        for (FeedForwardLayer layer : workingLayers) {
+        for (Layer layer : workingLayers) {
             for (int index = 0; index < layer.getNeurons().size(); index++) {
                 Neuron neuron = layer.getNeurons().get(index);
                 int hashId = System.identityHashCode(neuron);

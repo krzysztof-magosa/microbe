@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  * (c) 2014 Krzysztof Magosa
  */
 public class FeedForwardNetwork extends Network {
-    protected ArrayList<FeedForwardLayer> layers;
+    protected ArrayList<Layer> layers;
 
     public FeedForwardNetwork() {
         layers = new ArrayList<>();
@@ -22,8 +22,8 @@ public class FeedForwardNetwork extends Network {
      * @param initFunction Lamba which initialize layer
      * @return Created layer object
      */
-    public FeedForwardLayer createLayer(Consumer<FeedForwardLayer> initFunction) {
-        FeedForwardLayer layer = new FeedForwardLayer();
+    public Layer createLayer(Consumer<Layer> initFunction) {
+        Layer layer = new Layer();
 
         if (!layers.isEmpty()) {
             layer.setPreviousLayer(getLastLayer());
@@ -41,8 +41,8 @@ public class FeedForwardNetwork extends Network {
      * Helper method for easy creation of input layer.
      * @param inputNeurons Number of neurons (also inputs)
      */
-    public FeedForwardLayer createInputLayer(final int inputNeurons) {
-        return createLayer((FeedForwardLayer layer) -> {
+    public Layer createInputLayer(final int inputNeurons) {
+        return createLayer((Layer layer) -> {
             layer.createNeurons(inputNeurons, (Neuron neuron) -> {
                 neuron.setTransferFunction(new LinearTransferFunction());
 
@@ -73,7 +73,7 @@ public class FeedForwardNetwork extends Network {
      * Activate neurons on each layer
      */
     public void run() {
-        for (FeedForwardLayer layer : layers) {
+        for (Layer layer : layers) {
             layer.run();
 
             if (layer.hasNextLayer()) {
@@ -87,7 +87,7 @@ public class FeedForwardNetwork extends Network {
      * @return
      */
     public double[] getOutput() {
-        FeedForwardLayer layer = getLastLayer();
+        Layer layer = getLastLayer();
         ArrayList<Neuron> neurons = layer.getNeurons();
 
         double[] output = new double[neurons.size()];
@@ -105,14 +105,14 @@ public class FeedForwardNetwork extends Network {
      * to know how many inputs we need in each neuron.
      * @return Last layer of network
      */
-    public FeedForwardLayer getLastLayer() {
+    public Layer getLastLayer() {
         return layers.get(layers.size() - 1);
     }
 
     /**
      * Returns list of layers associated to this network
      */
-    public ArrayList<FeedForwardLayer> getLayers() {
+    public ArrayList<Layer> getLayers() {
         return layers;
     }
 
@@ -196,7 +196,7 @@ public class FeedForwardNetwork extends Network {
         }
 
         private void createLayer(LayerDefinition definition) {
-            instance.createLayer((FeedForwardLayer layer) -> {
+            instance.createLayer((Layer layer) -> {
                 layer.createNeurons(definition.neuronsCount, (Neuron neuron) -> {
                     if (definition.hasBias) {
                         neuron.createBias();
