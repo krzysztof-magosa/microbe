@@ -78,6 +78,18 @@ public class Pixel {
         setBlue((rgb >> 0) & 0xFF);
     }
 
+    public void setRGB(final int red, final int green, final int blue) {
+        setRed(red);
+        setGreen(green);
+        setBlue(blue);
+    }
+
+    public void setRGB(final double red, final double green, final double blue) {
+        setRed(red);
+        setGreen(green);
+        setBlue(blue);
+    }
+
     public void setColor(final Color color) {
         setRGB(color.getRGB());
     }
