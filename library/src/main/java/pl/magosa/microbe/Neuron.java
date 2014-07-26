@@ -15,6 +15,7 @@ public class Neuron {
     protected TransferFunction transferFunction;
     protected ArrayList<Connection> inputConnections;
     protected ArrayList<Connection> outputConnections;
+    protected Object learningData;
 
     public Neuron() {
         inputConnections = new ArrayList<>();
@@ -35,6 +36,14 @@ public class Neuron {
 
     public void addOutputConnection(final Connection connection) {
         outputConnections.add(connection);
+    }
+
+    public void setLearningData(final Object learningData) {
+        this.learningData = learningData;
+    }
+
+    public Object getLearningData() {
+        return learningData;
     }
 
     /**
