@@ -16,36 +16,20 @@ public class FeedForwardNetwork extends Network {
         layers = new ArrayList<>();
     }
 
-    /**
-     * Creates layer, associate it with this network, initialise it using provided lambda.
-     *
-     * @param initFunction Lamba which initialize layer
-     * @return Created layer object
-     */
-    public Layer createLayer(Consumer<Layer> initFunction) {
-        Layer layer = new Layer();
-
-        if (!layers.isEmpty()) {
-            layer.setPreviousLayer(getLastLayer());
+    protected void interconnectLayers(final Layer first, final Layer second) {
+        for (Neuron flNeuron : first.getNeurons()) {
+            for (Neuron slNeuron : second.getNeurons()) {
+                Connection.interconnect(flNeuron, slNeuron);
+            }
         }
-
-        initFunction.accept(layer);
-
-        // It must be below initFunction, because while creating layer, last layer is needed.
-        layers.add(layer);
-
-        return layer;
     }
 
-    /**
-     * Helper method for easy creation of input layer.
-     * @param inputNeurons Number of neurons (also inputs)
-     */
-    public Layer createInputLayer(final int inputNeurons) {
-        Layer layer = new InputLayer(inputNeurons);
+    protected void addLayer(final Layer layer) {
         layers.add(layer);
 
-        return layer;
+        if (layers.size() >= 2) {
+            interconnectLayers(layers.get(layers.size() - 2), layer);
+        }
     }
 
     /**
@@ -53,7 +37,9 @@ public class FeedForwardNetwork extends Network {
      * @param values
      */
     public void setValues(final double[] values) {
-        if (values.length != layers.get(0).getNeurons().size()) {
+        final int size = layers.get(0).getNeurons().size() - (layers.get(0).hasBias() ? 1 : 0);
+
+        if (values.length != size) {
             throw new RuntimeException("Incorrect number of input values.");
         }
 
@@ -71,10 +57,6 @@ public class FeedForwardNetwork extends Network {
     public void run() {
         for (Layer layer : layers) {
             layer.run();
-
-            if (layer.hasNextLayer()) {
-                layer.forward();
-            }
         }
     }
 
@@ -135,7 +117,7 @@ public class FeedForwardNetwork extends Network {
 
     public static class Builder {
         private boolean isBuilt;
-        private int inputs;
+        private LayerDefinition inputLayer;
         private ArrayList<LayerDefinition> hiddenLayers;
         private LayerDefinition outputLayer;
         private FeedForwardNetwork instance;
@@ -143,10 +125,12 @@ public class FeedForwardNetwork extends Network {
         private class LayerDefinition {
             private final int neuronsCount;
             private final TransferFunction function;
+            private final boolean withBias;
 
-            private LayerDefinition(int neuronsCount, TransferFunction function) {
+            private LayerDefinition(int neuronsCount, TransferFunction function, boolean withBias) {
                 this.neuronsCount = neuronsCount;
                 this.function = function;
+                this.withBias = withBias;
             }
         }
 
@@ -154,38 +138,59 @@ public class FeedForwardNetwork extends Network {
             hiddenLayers = new ArrayList<>();;
         }
 
-        public Builder inputLayer(int inputs) {
-            this.inputs = inputs;
+        public Builder inputLayer(int inputs, boolean withBias) {
+            inputLayer = new LayerDefinition(inputs, null, withBias);
             return this;
         }
 
-        public Builder hiddenLayer(int neuronsCount, TransferFunction function) {
+        public Builder inputLayer(int inputs) {
+            return inputLayer(inputs, true);
+        }
+
+        public Builder hiddenLayer(int neuronsCount, TransferFunction function, boolean withBias) {
             hiddenLayers.add(
                 new LayerDefinition(
                     neuronsCount,
-                    function
+                    function,
+                    withBias
                 )
             );
 
             return this;
         }
 
+        public Builder hiddenLayer(int neuronsCount, TransferFunction function) {
+            return hiddenLayer(neuronsCount, function, true);
+        }
+
         public Builder outputLayer(int neuronsCount, TransferFunction function) {
             outputLayer = new LayerDefinition(
                 neuronsCount,
-                function
+                function,
+                false
             );
 
             return this;
         }
 
+        private void createInputLayer(LayerDefinition definition) {
+            Layer layer = new InputLayer(definition.neuronsCount);
+
+            if (definition.withBias) {
+                layer.initBias();
+            }
+
+            instance.addLayer(layer);
+        }
+
         private void createLayer(LayerDefinition definition) {
-            instance.createLayer((Layer layer) -> {
-                layer.createNeurons(definition.neuronsCount, (Neuron neuron) -> {
-                    neuron.setTransferFunction(definition.function);
-                    neuron.createInputs(instance.getLastLayer().getNeurons().size());
-                });
-            });
+            Layer layer = new StandardLayer(definition.neuronsCount, definition.function);
+
+            if (definition.withBias) {
+                layer.initBias();
+            }
+
+            instance.addLayer(layer);
         }
 
         private void validateState() {
@@ -193,7 +198,7 @@ public class FeedForwardNetwork extends Network {
                 throw new IllegalStateException("Network has been already built.");
             }
 
-            if (inputs <= 0) {
+            if (inputLayer == null) {
                 throw new IllegalStateException("Network must have input layer.");
             }
 
@@ -211,7 +216,7 @@ public class FeedForwardNetwork extends Network {
 
             instance = new FeedForwardNetwork();
 
-            instance.createInputLayer(inputs);
+            createInputLayer(inputLayer);
             for (LayerDefinition definition : hiddenLayers) {
                 createLayer(definition);
             }

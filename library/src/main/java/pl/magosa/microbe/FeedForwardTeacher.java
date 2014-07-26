@@ -46,26 +46,34 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
         for (Layer layer : workingLayers) {
             for (int index = 0; index < layer.getNeurons().size(); index++) {
                 Neuron neuron = layer.getNeurons().get(index);
+
+                if (neuron instanceof BiasNeuron) {
+                    continue;
+                }
+
                 int hashId = System.identityHashCode(neuron);
+                double output = neuron.getOutput();
 
                 if (layer == outputLayer) {
-                    errorGradient.put(hashId, (desired[index] - neuron.getOutput()) * neuron.getTransferFunction().derivative(neuron.getOutput()));
+                    double error = (desired[index] - output);
+                    double gradient = error * neuron.getTransferFunction().derivative(output);
+                    errorGradient.put(hashId, gradient);
                 }
                 else {
                     double productSum = 0;
-                    for (Neuron nlNeuron : layer.getNextLayer().getNeurons()) {
-                        int nlHashId = System.identityHashCode(nlNeuron);
-                        productSum += (errorGradient.get(nlHashId) * nlNeuron.getInput(index).getWeight());
+                    for (Connection connection : neuron.getOutputConnections()) {
+                        int nlHashId = System.identityHashCode(connection.getDestination());
+                        productSum += (errorGradient.get(nlHashId) * connection.getWeight());
                     }
 
-                    errorGradient.put(hashId, neuron.getTransferFunction().derivative(neuron.getOutput()) * productSum);
+                    errorGradient.put(hashId, neuron.getTransferFunction().derivative(output) * productSum);
                 }
 
-                for (Input input : neuron.getInputs()) {
-                    double correction = learningRate * input.getValue() * errorGradient.get(hashId);
-                    double newWeight = input.getWeight() + correction + (momentum * prevWeightCorrection.get(hashId));
+                for (Connection connection : neuron.getInputConnections()) {
+                    double correction = learningRate * connection.getInput() * errorGradient.get(hashId);
+                    double newWeight = connection.getWeight() + correction + (momentum * prevWeightCorrection.get(hashId));
 
-                    input.setWeight(newWeight);
+                    connection.setWeight(newWeight);
                     prevWeightCorrection.put(hashId, correction);
                 }
             }

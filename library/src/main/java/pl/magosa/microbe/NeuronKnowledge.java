@@ -9,10 +9,10 @@ import java.util.Map;
  * (c) 2014 Krzysztof Magosa
  */
 public class NeuronKnowledge {
-    protected HashMap<Integer, Double> inputs;
+    protected HashMap<Integer, Double> inputConnections;
 
     public NeuronKnowledge() {
-        inputs = new HashMap<>();
+        inputConnections = new HashMap<>();
     }
 
     /**
@@ -34,8 +34,8 @@ public class NeuronKnowledge {
      * @param neuron Neuron to knowledge should be transferred
      */
     public void transferToNeuron(final Neuron neuron) {
-        for (Map.Entry<Integer, Double> entry : inputs.entrySet()) {
-            neuron.getInputs().get(entry.getKey()).setWeight(entry.getValue());
+        for (Map.Entry<Integer, Double> entry : inputConnections.entrySet()) {
+            neuron.getInputConnections().get(entry.getKey()).setWeight(entry.getValue());
         }
     }
 
@@ -45,9 +45,9 @@ public class NeuronKnowledge {
      * @param neuron Neuron from knowledge should be transferred
      */
     public void transferFromNeuron(final Neuron neuron) {
-        inputs.clear();
-        for (int i = 0; i < neuron.getInputs().size(); i++) {
-            inputs.put(i, neuron.getInputs().get(i).getWeight());
+        inputConnections.clear();
+        for (int i = 0; i < neuron.getInputConnections().size(); i++) {
+            inputConnections.put(i, neuron.getInputConnections().get(i).getWeight());
         }
     }
 }

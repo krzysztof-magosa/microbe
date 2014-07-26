@@ -12,11 +12,29 @@ import java.util.function.Consumer;
 public class Neuron {
     protected double output;
     protected double sum;
-    protected ArrayList<Input> inputs;
     protected TransferFunction transferFunction;
+    protected ArrayList<Connection> inputConnections;
+    protected ArrayList<Connection> outputConnections;
 
     public Neuron() {
-        inputs = new ArrayList<>();
+        inputConnections = new ArrayList<>();
+        outputConnections = new ArrayList<>();
+    }
+
+    public ArrayList<Connection> getInputConnections() {
+        return inputConnections;
+    }
+
+    public ArrayList<Connection> getOutputConnections() {
+        return outputConnections;
+    }
+
+    public void addInputConnection(final Connection connection) {
+        inputConnections.add(connection);
+    }
+
+    public void addOutputConnection(final Connection connection) {
+        outputConnections.add(connection);
     }
 
     /**
@@ -28,50 +46,6 @@ public class Neuron {
 
     public TransferFunction getTransferFunction() {
         return transferFunction;
-    }
-
-    /**
-     * Gets input
-     * @param index Index of input
-     * @return Input object
-     */
-    public Input getInput(final int index) {
-        return inputs.get(index);
-    }
-
-    /**
-     * Creates inputs
-     * @param count How many inputs should be created
-     */
-    public void createInputs(final int count) {
-        for (int i = 1; i <= count; i++) {
-            createInput((Input input) -> {});
-        }
-    }
-
-    /**
-     * Creates inputs and initialise them using specified lambda
-     * @param count How many inputs should be created
-     * @param initFunction Lambda which initialise each input
-     */
-    public void createInputs(final int count, Consumer<Input> initFunction) {
-        for (int i = 1; i <= count; i++) {
-            createInput(initFunction);
-        }
-    }
-
-    /**
-     * Creates one input initialise it using specified lambda
-     * @param initFunction Lambda which initialise input
-     */
-    public void createInput(Consumer<Input> initFunction) {
-        Input input = new Input();
-        initFunction.accept(input);
-        inputs.add(input);
-    }
-
-    public ArrayList<Input> getInputs() {
-        return inputs;
     }
 
     public double getOutput() {
@@ -87,9 +61,8 @@ public class Neuron {
      */
     public void activate() {
         sum = 0;
-
-        for (Input input : inputs) {
-            sum += (input.getWeight() * input.getValue());
+        for (Connection connection : inputConnections) {
+            sum += connection.getWeightedInput();
         }
 
         output = transferFunction.function(sum);
