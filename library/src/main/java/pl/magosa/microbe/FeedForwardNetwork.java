@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 public class FeedForwardNetwork extends Network {
     protected ArrayList<Layer> layers;
 
-    public FeedForwardNetwork() {
+    protected FeedForwardNetwork() {
         layers = new ArrayList<>();
     }
 
