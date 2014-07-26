@@ -1,5 +1,6 @@
 package pl.magosa.microbe;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +13,6 @@ import java.util.Map;
 public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
     protected Layer outputLayer;
     protected ArrayList<Layer> workingLayers;
-    protected HashMap<Integer, Double> prevWeightCorrection;
-    protected HashMap<Integer, Double> prevWeightCorrectionBackup;
     protected NetworkKnowledge knowledgeBackup;
 
     public FeedForwardTeacher(FeedForwardNetwork network) {
@@ -25,14 +24,12 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
             workingLayers.add(network.getLayers().get(i));
         }
 
-        prevWeightCorrection = new HashMap<>();
         for (Layer layer : workingLayers) {
             for (Neuron neuron : layer.getNeurons()) {
-                prevWeightCorrection.put(System.identityHashCode(neuron), 0.0);
+                neuron.setLearningData(new BPLearningData());
             }
         }
 
-        prevWeightCorrectionBackup = new HashMap<>();
         knowledgeBackup = new NetworkKnowledge();
     }
 
@@ -41,8 +38,6 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
      * @param desired Expected output of network.
      */
     protected void backPropagate(final double[] desired) {
-        HashMap<Integer, Double> errorGradient = new HashMap<>();
-
         for (Layer layer : workingLayers) {
             for (int index = 0; index < layer.getNeurons().size(); index++) {
                 Neuron neuron = layer.getNeurons().get(index);
@@ -51,30 +46,27 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
                     continue;
                 }
 
-                int hashId = System.identityHashCode(neuron);
+                BPLearningData data = (BPLearningData)neuron.getLearningData();
                 double output = neuron.getOutput();
 
                 if (layer == outputLayer) {
-                    double error = (desired[index] - output);
-                    double gradient = error * neuron.getTransferFunction().derivative(output);
-                    errorGradient.put(hashId, gradient);
+                    data.gradient = (desired[index] - output) * neuron.getTransferFunction().derivative(output);
                 }
                 else {
                     double productSum = 0;
                     for (Connection connection : neuron.getOutputConnections()) {
-                        int nlHashId = System.identityHashCode(connection.getDestination());
-                        productSum += (errorGradient.get(nlHashId) * connection.getWeight());
+                        BPLearningData nlData = (BPLearningData)connection.getDestination().getLearningData();
+                        productSum += (nlData.gradient * connection.getWeight());
                     }
 
-                    errorGradient.put(hashId, neuron.getTransferFunction().derivative(output) * productSum);
+                    data.gradient = neuron.getTransferFunction().derivative(output) * productSum;
                 }
 
                 for (Connection connection : neuron.getInputConnections()) {
-                    double correction = learningRate * connection.getInput() * errorGradient.get(hashId);
-                    double newWeight = connection.getWeight() + correction + (momentum * prevWeightCorrection.get(hashId));
+                    double correction = learningRate * connection.getInput() * data.gradient;
+                    connection.incWeight(correction + (momentum * data.correction));
 
-                    connection.setWeight(newWeight);
-                    prevWeightCorrection.put(hashId, correction);
+                    data.correction = correction;
                 }
             }
         }
@@ -84,8 +76,12 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
      * Backups thresholds and weights of all neurons, so last step may be rollbacked.
      */
     protected void backupParameters() {
-        prevWeightCorrectionBackup.clear();
-        prevWeightCorrectionBackup.putAll(prevWeightCorrection);
+        for (Layer layer : workingLayers) {
+            for (Neuron neuron : layer.getNeurons()) {
+                BPLearningData data = (BPLearningData)neuron.getLearningData();
+                data.backup();
+            }
+        }
 
         knowledgeBackup.transferFromNetwork(network);
     }
@@ -94,8 +90,12 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
      * Performs rollback restoring thresholds and weights of all neurons to previous state.
      */
     public void rollback() {
-        prevWeightCorrection.clear();
-        prevWeightCorrection.putAll(prevWeightCorrectionBackup);
+        for (Layer layer : workingLayers) {
+            for (Neuron neuron : layer.getNeurons()) {
+                BPLearningData data = (BPLearningData)neuron.getLearningData();
+                data.rollback();
+            }
+        }
 
         knowledgeBackup.transferToNetwork(network);
     }
@@ -111,6 +111,20 @@ public class FeedForwardTeacher extends Teacher<FeedForwardNetwork> {
             network.run();
 
             backPropagate(set.getOutput());
+        }
+    }
+
+    protected class BPLearningData {
+        protected double gradient;
+        protected double correction;
+        protected double correctionBackup;
+
+        public void rollback() {
+            correction = correctionBackup;
+        }
+
+        public void backup() {
+            correctionBackup = correction;
         }
     }
 }
