@@ -65,7 +65,7 @@ public class FeedForwardNetwork extends Network {
      * @return
      */
     public double[] getOutput() {
-        Layer layer = getLastLayer();
+        Layer layer = layers.get(layers.size() - 1);
         ArrayList<Neuron> neurons = layer.getNeurons();
 
         double[] output = new double[neurons.size()];
@@ -75,16 +75,6 @@ public class FeedForwardNetwork extends Network {
         }
 
         return output;
-    }
-
-    /**
-     * Returns last layer in network.
-     * It's useful while creating network, e.g to check number of neurons in previously created layer
-     * to know how many inputs we need in each neuron.
-     * @return Last layer of network
-     */
-    public Layer getLastLayer() {
-        return layers.get(layers.size() - 1);
     }
 
     /**
