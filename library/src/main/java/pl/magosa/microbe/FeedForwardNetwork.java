@@ -143,12 +143,10 @@ public class FeedForwardNetwork extends Network {
         private class LayerDefinition {
             private final int neuronsCount;
             private final TransferFunction function;
-            private final boolean hasBias;
 
-            private LayerDefinition(int neuronsCount, TransferFunction function, boolean hasBias) {
+            private LayerDefinition(int neuronsCount, TransferFunction function) {
                 this.neuronsCount = neuronsCount;
                 this.function = function;
-                this.hasBias = hasBias;
             }
         }
 
@@ -161,43 +159,29 @@ public class FeedForwardNetwork extends Network {
             return this;
         }
 
-        public Builder hiddenLayer(int neuronsCount, TransferFunction function, boolean hasBias) {
+        public Builder hiddenLayer(int neuronsCount, TransferFunction function) {
             hiddenLayers.add(
                 new LayerDefinition(
                     neuronsCount,
-                    function,
-                    hasBias
+                    function
                 )
             );
 
             return this;
         }
 
-        public Builder hiddenLayer(int neuronsCount, TransferFunction function) {
-            return hiddenLayer(neuronsCount, function, true);
-        }
-
-        public Builder outputLayer(int neuronsCount, TransferFunction function, boolean hasBias) {
+        public Builder outputLayer(int neuronsCount, TransferFunction function) {
             outputLayer = new LayerDefinition(
                 neuronsCount,
-                function,
-                hasBias
+                function
             );
 
             return this;
         }
 
-        public Builder outputLayer(int neuronsCount, TransferFunction function) {
-            return outputLayer(neuronsCount, function, true);
-        }
-
         private void createLayer(LayerDefinition definition) {
             instance.createLayer((Layer layer) -> {
                 layer.createNeurons(definition.neuronsCount, (Neuron neuron) -> {
-                    if (definition.hasBias) {
-                        neuron.createBias();
-                    }
-
                     neuron.setTransferFunction(definition.function);
                     neuron.createInputs(instance.getLastLayer().getNeurons().size());
                 });

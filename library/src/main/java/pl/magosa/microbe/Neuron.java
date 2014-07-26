@@ -12,7 +12,6 @@ import java.util.function.Consumer;
 public class Neuron {
     protected double output;
     protected double sum;
-    protected boolean hasBias;
     protected ArrayList<Input> inputs;
     protected TransferFunction transferFunction;
 
@@ -32,12 +31,12 @@ public class Neuron {
     }
 
     /**
-     * Gets input omitting bias (if any)
-     * @param index Index of input, bias is not counted, so 0 is always first input
+     * Gets input
+     * @param index Index of input
      * @return Input object
      */
     public Input getInput(final int index) {
-        return inputs.get(hasBias() ? index+1 : index);
+        return inputs.get(index);
     }
 
     /**
@@ -94,25 +93,5 @@ public class Neuron {
         }
 
         output = transferFunction.function(sum);
-    }
-
-    public void createBias() {
-        if (!inputs.isEmpty()) {
-            throw new RuntimeException("Bias must be created before inputs.");
-        }
-
-        if (hasBias) {
-            throw new RuntimeException("Neuron can have just one bias.");
-        }
-
-        createInput((Input input) -> {
-            input.setValue(1);
-        });
-
-        hasBias = true;
-    }
-
-    public boolean hasBias() {
-        return hasBias;
     }
 }
